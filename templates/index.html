@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>🔥 最新上架好物</h2>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+        {% for good in goods %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                {% if good.image_filename %}
+                    <img src="{{ url_for('static', filename='uploads/' + good.image_filename) }}" class="card-img-top" style="object-fit: cover; height: 200px;" alt="商品图片">
+                {% else %}
+                     <img src="https://picsum.photos/300/200?random={{ good.id }}" class="card-img-top" style="object-fit: cover; height: 200px;" alt="默认图片">
+
+                {% endif %}
+
+                <div class="card-body">
+                    <h5 class="card-title fw-bold text-truncate" title="{{ good.name }}">{{ good.name }}</h5>
+                    <h4 class="text-danger fw-bold">¥{{ good.price }}</h4>
+                    <p class="card-text text-muted small mt-2">
+                        卖家：{{ good.seller.phone }}
+                    </p >
+                </div>
+
+                <!-- 3. 按钮操作区 -->
+                <div class="card-footer bg-white border-top-0 pb-3">
+                    {% if good.status == 'on_sale' %}
+                        <!-- 如果当前登录用户就是卖家 -->
+                        {% if session.get('user_id') == good.seller_id %}
+                            <form action="/delete/{{ good.id }}" method="POST" class="d-grid">
+                                <button type="submit" class="btn btn-outline-danger btn-sm">下架</button>
+                            </form>
+                        <!-- 如果当前登录用户不是卖家 -->
+                        {% else %}
+                            <form action="/buy/{{ good.id }}" method="POST" class="d-grid">
+                                <button type="submit" class="btn btn-warning btn-sm fw-bold">立即购买</button>
+                            </form>
+                        {% endif %}
+                    {% else %}
+                        <!-- 商品已售出状态 -->
+                        <button class="btn btn-secondary w-100 btn-sm" disabled>已被抢空</button>
+                    {% endif %}
+                </div>
+                
+            </div>
+        </div>
+        {% else %}
+        <!-- 如果 goods 列表为空，显示这个提示 -->
+        <div class="col-12 text-center py-5">
+            <h4 class="text-muted">还没有商品哦，快去发布第一个吧！</h4>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
