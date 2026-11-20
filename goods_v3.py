@@ -147,8 +147,10 @@ def buy_page(goods_id):
     #运用关系直接得到卖家id是否与登录id是同一人
     if goods.seller_id == session['user_id']:
         return"不能购买自己的商品,<a href='/index'>返回主页</a >"
-    if goods.status == 'sold':
-        return"商品已被买走,<a href='/index'>返回主页</a >"
+    upload_rows = Goods.query.filter_by(id = goods_id,status = 'on_sale').update({'status':'sold'})
+    if upload_rows == 0:
+        db.session.rollback()
+        return "手慢了，商品已经被抢走了,<a href='/index'>返回主页</a >"
     new_order = Order(buyer_id = session['user_id'], goods_id = goods.id, price = goods.price)
     db.session.add(new_order)
     goods.status = 'sold'

@@ -28,6 +28,19 @@ def test_register_success(test_user):
     print(f"\n✅ 注册成功，当前注册手机号: {test_user['phone']}")
 
 
+def test_register_duplicate(test_user):
+    #测试重复注册,断言结果,返回数据，判断最终结果
+    data = {"phone": test_user["phone"],"pwd": test_user["pwd"]}
+    
+    # 发送请求，抓到 200 状态码，allow_redirects=False（禁止重定向到 /login 页面）
+    res = requests.post(f"{BASE_URL}/register", data=data, allow_redirects=False)
+    
+    # 断言：重复应该返回 200
+    assert res.status_code == 200
+    assert "该手机号已注册" in res.text
+    print(f"\n✅ 该手机号已经注册，重复注册测试成功，重复注册手机号: {test_user['phone']}")
+
+
 def test_login_success(test_user):
     #测试登录，断言结果,返回数据，判断最终结果
     data = {"phone": test_user["phone"], "pwd": test_user["pwd"]}
