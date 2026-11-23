@@ -1,2 +1,12 @@
+__pycache__/
+*.py[cod]
+*.pyo
 venv/
-_pycache_
+.venv/
+.pytest_cache/
+instance/
+*.db
+*.sqlite3
+.env
+.vscode/
+.idea/

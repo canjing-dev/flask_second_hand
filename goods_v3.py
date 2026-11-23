@@ -41,7 +41,8 @@ class Order(db.Model):
 with app.app_context():
     db.create_all()
 
-@app.route('/index')
+
+@app.route('/')
 def index_page():
     #所有商品按照倒序方式排列展示(desc)
     all_goods = Goods.query.order_by(Goods.id.desc()).all()
@@ -90,7 +91,7 @@ def login_page():
             #用session来确认用户登录态
             session['user_id'] = user.id
             session['phone'] = user.phone
-            return redirect('/index')
+            return redirect('/')
         else:
             return "手机号或密码不对！<a href='/login'>重新登录</a >"
     return render_template('login.html')
@@ -99,7 +100,7 @@ def login_page():
 def logout():
     #清除用户登录态
     session.clear()
-    return redirect('/index')
+    return redirect('/')
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_page():
@@ -132,7 +133,7 @@ def upload_page():
         db.session.add(new_goods)
         db.session.commit()
         
-        return redirect('/index')
+        return redirect('/')
     return render_template('upload.html')
 
 
@@ -143,19 +144,19 @@ def buy_page(goods_id):
     #使用商品唯一id进行查询
     goods = Goods.query.get(goods_id)
     if not goods:
-        return"商品不存在,<a href='/index'>返回主页</a >"
+        return"商品不存在,<a href='/'>返回主页</a >"
     #运用关系直接得到卖家id是否与登录id是同一人
     if goods.seller_id == session['user_id']:
-        return"不能购买自己的商品,<a href='/index'>返回主页</a >"
+        return"不能购买自己的商品,<a href='/'>返回主页</a >"
     upload_rows = Goods.query.filter_by(id = goods_id,status = 'on_sale').update({'status':'sold'})
     if upload_rows == 0:
         db.session.rollback()
-        return "手慢了，商品已经被抢走了,<a href='/index'>返回主页</a >"
+        return "手慢了，商品已经被抢走了,<a href='/'>返回主页</a >"
     new_order = Order(buyer_id = session['user_id'], goods_id = goods.id, price = goods.price)
     db.session.add(new_order)
     goods.status = 'sold'
     db.session.commit()
-    return"购买成功,<a href='/index'>返回主页</a >"
+    return"购买成功,<a href='/'>返回主页</a >"
 
 
 
@@ -170,7 +171,7 @@ def remove_page(goods_id):
         return"您无权删除他人商品,<a href='/upload'>去发布</a >"
     db.session.delete(goods)
     db.session.commit()
-    return redirect('/index')
+    return redirect('/')
 
 if __name__ == '__main__':
     app.run(debug=True)
