@@ -1,4 +1,4 @@
-<img width="1920" height="1080" alt="pytest_pytest_auto_test2" src="https://github.com/user-attachments/assets/551aa9b4-9125-464e-8f66-d293c4143d50" />
+<img width="1406" height="791" alt="pytest_pytest_auto_test3" src="https://github.com/user-attachments/assets/e5a84605-205b-4b0c-999c-97e9e018a064" />
 这是一个基于Flask + MySQL独立开发的全栈Web项目。
 
 技术栈:
