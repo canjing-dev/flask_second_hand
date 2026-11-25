@@ -3,8 +3,8 @@
 
 技术栈:
 后端:Python,Flask,SQLAlchemy。
-数据库: MySQ。
-测试: Pytest, Requests。
+数据库: MySQL。
+测试: Pytest, Requests，assert。
 部署: Linux, Git。
 
 核心功能：
