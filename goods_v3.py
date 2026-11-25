@@ -44,7 +44,7 @@ with app.app_context():
 
 @app.route('/')
 def index_page():
-    #所有商品按照倒序方式排列展示(desc)
+    #所有商品倒序方式排列展示(desc)
     all_goods = Goods.query.order_by(Goods.id.desc()).all()
     return render_template ('index.html',goods= all_goods)
 
@@ -53,6 +53,8 @@ def register_page():
     if request.method == 'POST':
         phone = request.form.get('phone')
         pwd = request.form.get('pwd')
+        if len(phone) != 11 and phone.isdigit():
+            return "请输入11位纯数字,<a href='/register'>重新注册</a >"
         #从User数据库进行手机号查重
         existing_user = User.query.filter_by(phone=phone).first()
         if existing_user:
