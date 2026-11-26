@@ -53,9 +53,10 @@ def register_page():
     if request.method == 'POST':
         phone = request.form.get('phone')
         pwd = request.form.get('pwd')
-        if len(phone) != 11 and phone.isdigit():
+        if len(phone) != 11 or phone.isdigit():
             return "请输入11位纯数字,<a href='/register'>重新注册</a >"
         #从User数据库进行手机号查重
+        #SELECT * FROM user WHERE phone = : phone LIMIT 1:
         existing_user = User.query.filter_by(phone=phone).first()
         if existing_user:
             return "该手机号已注册,<a href='login '>去登录</a >"
